@@ -10,7 +10,7 @@
 
     {{-- Notificações --}}
     @if (session('success'))
-        <div id="toast-success"
+        <div id="toast-success"exit
              class="fixed top-20 right-5 z-50 flex items-center gap-3 bg-white border border-emerald-200 text-emerald-800 text-sm font-semibold px-5 py-3.5 rounded-2xl shadow-xl shadow-emerald-600/10 transition-all duration-500">
             <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -190,55 +190,50 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.3/Sortable.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // =============================================
-            // DRAG & DROP
-            // =============================================
-            const listaCategorias = document.getElementById('lista-categorias');
-            if (listaCategorias && typeof Sortable !== 'undefined') {
-                Sortable.create(listaCategorias, {
-                    animation: 180,
-                    ghostClass: 'opacity-40',
-                    chosenClass: 'ring-2',
-                    dragClass: 'shadow-2xl',
-                    filter: 'a, button, input, form, .nome-display',
-                    preventOnFilter: false,
-                    onEnd: function () {
-                        const items = listaCategorias.querySelectorAll('.categoria-item');
-                        const ids = Array.from(items).map(function (el) {
-                            return parseInt(el.dataset.id, 10);
-                        });
+        // =============================================
+        // DRAG & DROP
+        // =============================================
+        const listaCategorias = document.getElementById('lista-categorias');
+        if (listaCategorias) {
+            Sortable.create(listaCategorias, {
+                handle: '.drag-handle',
+                animation: 180,
+                ghostClass: 'opacity-40',
+                chosenClass: 'ring-2 ring-emerald-400 ring-offset-2 scale-[1.01] shadow-lg',
+                onEnd: function () {
+                    const ids = [...listaCategorias.querySelectorAll('.categoria-item')].map(function (el) {
+                        return parseInt(el.dataset.id, 10);
+                    });
 
-                        // Atualiza badges de ordem visualmente
-                        listaCategorias.querySelectorAll('.ordem-badge').forEach(function (badge, i) {
-                            badge.textContent = i + 1;
-                        });
+                    // Atualiza badges de ordem visualmente
+                    listaCategorias.querySelectorAll('.ordem-badge').forEach(function (badge, i) {
+                        badge.textContent = i + 1;
+                    });
 
-                        // Salva no servidor
-                        fetch('{{ route("categorias.reorder") }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({ ids: ids })
-                        })
-                        .then(function (response) {
-                            if (!response.ok) throw new Error('Falha ao salvar a nova ordem.');
-                            return response.json();
-                        })
-                        .then(function (data) {
-                            mostrarToastReordem('Ordem salva com sucesso!');
-                        })
-                        .catch(function (error) {
-                            console.error('Erro na reordenação:', error);
-                            mostrarToastReordem('Erro ao salvar a nova ordem.', true);
-                        });
-                    }
-                });
-            }
-        });
+                    // Salva no servidor
+                    fetch('{{ route("categorias.reorder") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ ids: ids })
+                    })
+                    .then(function (response) {
+                        if (!response.ok) throw new Error('Falha ao salvar a nova ordem.');
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        mostrarToastReordem('Ordem salva com sucesso!');
+                    })
+                    .catch(function (error) {
+                        console.error('Erro na reordenação:', error);
+                        mostrarToastReordem('Erro ao salvar a nova ordem.', true);
+                    });
+                }
+            });
+        }
 
         function mostrarToastReordem(mensagem, isError = false) {
             let toast = document.getElementById('toast-reordem');
