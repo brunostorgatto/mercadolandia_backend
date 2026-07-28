@@ -6,6 +6,7 @@ return [
         'not_found' => 'Este código de convite não existe.',
         'used'     => 'Este convite já foi utilizado.',
         'expired'  => 'Este convite já expirou.',
+        'invalid_format' => 'O código deve ter 2 letras seguidas de 4 números (Ex: AB1234).', // ADICIONE ESTA LINHA
     ],
     'user' => [
         'name_required'  => 'O nome é obrigatório.',

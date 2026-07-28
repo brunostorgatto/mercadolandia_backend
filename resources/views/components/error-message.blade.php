@@ -1,6 +1,6 @@
 @props(['message' => null])
 
-<!-- A classe min-h-[24px] garante que o espaço vertical sempre exista -->
+<!-- Se um dia quiser mudar o espaçamento, você altera SÓ AQUI -->
 <div class="min-h-[24px] pt-1.5">
     @if ($message)
         <p {{ $attributes->merge(['class' => 'text-xs text-rose-500 font-medium']) }}>

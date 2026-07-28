@@ -42,18 +42,17 @@
                     placeholder="Ex: ABC-123-XYZ"
                     class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
             </div>
-            @if ($invitationError)
-            <p class="mt-1.5 text-xs text-rose-500 font-medium">{{ $invitationError }}</p>
-            @endif
+            <x-error-message :message="$invitationError" />
         </div>
 
         <div class="pt-2">
             <x-primary-button
                 wire:click="validateInvitation"
-                wire:loading.attr="disabled">
+                wire:loading.attr="disabled"
+                class="w-full">
                 <span wire:loading.remove wire:target="validateInvitation">Validar Convite</span>
                 <span wire:loading wire:target="validateInvitation">Verificando...</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
             </x-primary-button>
@@ -80,7 +79,8 @@
                     placeholder="Ex: João da Silva"
                     class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
             </div>
-            @error('name') <p class="mt-1.5 text-xs text-rose-500">{{ $message }}</p> @enderror
+            
+            <x-error-message :message="$errors->first('name')" />
         </div>
 
         <div>
@@ -99,18 +99,21 @@
                     placeholder="seu@email.com"
                     class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
             </div>
-            @error('email') <p class="mt-1.5 text-xs text-rose-500">{{ $message }}</p> @enderror
+            
+            <x-error-message :message="$errors->first('email')" />
         </div>
 
         <div class="pt-2">
-            <button type="button"
+            <x-primary-button
                 wire:click="proceedToPassword"
-                class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transform active:scale-[0.99] transition-all duration-200">
-                <span>Continuar para Senha</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                wire:loading.attr="disabled"
+                class="w-full">
+                <span wire:loading.remove wire:target="proceedToPassword">Continuar para Senha</span>
+                <span wire:loading wire:target="proceedToPassword">Processando...</span>
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
-            </button>
+            </x-primary-button>
         </div>
     </div>
     @endif
@@ -134,7 +137,8 @@
                     placeholder="••••••••"
                     class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
             </div>
-            @error('password') <p class="mt-1.5 text-xs text-rose-500">{{ $message }}</p> @enderror
+            
+            <x-error-message :message="$errors->first('password')" />
         </div>
 
         <div>
@@ -153,15 +157,18 @@
                     placeholder="••••••••"
                     class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
             </div>
+
+            <x-error-message :message="$errors->first('password_confirmation')" />
         </div>
 
         <div class="pt-2">
             <x-primary-button
                 wire:click="register"
-                wire:loading.attr="disabled">
+                wire:loading.attr="disabled"
+                class="w-full">
                 <span wire:loading.remove wire:target="register">Finalizar Cadastro</span>
                 <span wire:loading wire:target="register">Criando Conta...</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
             </x-primary-button>

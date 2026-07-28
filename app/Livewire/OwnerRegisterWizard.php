@@ -35,6 +35,13 @@ class OwnerRegisterWizard extends Component
             return;
         }
 
+        $this->invitation_code = strtoupper(trim($this->invitation_code));
+
+        if (!preg_match('/^[A-Z]{2}[0-9]{4}$/', $this->invitation_code)) {
+            $this->invitationError = __('messages.invite.invalid_format');
+            return;
+        }
+
         $invitation = Invitation::where('code', $this->invitation_code)->first();
 
         if (!$invitation) {
@@ -52,7 +59,6 @@ class OwnerRegisterWizard extends Component
             return;
         }
 
-        // Se o convite tem um e-mail pré-definido, já preenche o campo
         if ($invitation->email) {
             $this->email = $invitation->email;
         }
@@ -92,9 +98,21 @@ class OwnerRegisterWizard extends Component
             'password.confirmed' => __('messages.password.confirmed'),
         ]);
 
-        // 1. Cria um estabelecimento inicial
+
+        // 1. Cria o estabelecimento base com dados temporários
         $estabelecimento = Estabelecimento::create([
-            'nome' => 'Meu Mercado',
+            'nome_fantasia' => 'Meu Mercado',
+            'razao_social'  => 'Razão Social Padrão',
+            'cnpj'          => '00.000.000/0000-00',
+            'telefone'      => '(00) 00000-0000',
+            'email_contato' => $this->email,
+            'cep'           => '00000-000',
+            'logradouro'    => 'Endereço Padrão',
+            'numero'        => 'S/N',
+            'complemento'   => null, // Esse é o único que aceita Null no seu banco
+            'bairro'        => 'Bairro Padrão',
+            'cidade'        => 'Cidade Padrão',
+            'estado'        => 'XX',
         ]);
 
         // 2. Cria o Usuário vinculando ao Estabelecimento
@@ -103,7 +121,7 @@ class OwnerRegisterWizard extends Component
             'email'              => $this->email,
             'password'           => Hash::make($this->password),
             'estabelecimento_id' => $estabelecimento->id,
-            'nivel_acesso'       => 'admin',
+            'role'       => 'admin',
         ]);
 
         // 3. Queima o convite para não ser usado novamente
@@ -112,7 +130,7 @@ class OwnerRegisterWizard extends Component
         // 4. Faz o login automático
         Auth::login($user);
 
-        // 5. Redireciona para o painel
+        // 5. Redireciona para o painel principal
         return redirect()->to('/dashboard');
     }
 
