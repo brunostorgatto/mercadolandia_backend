@@ -1,14 +1,19 @@
-<?php 
+<?php
+
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\EstabelecimentoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProdutoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\OwnerRegisterWizard;
 
 Route::get('/', function () {
     return redirect('/dashboard');
 });
+
+
+Route::get('/cadastro-lojista', OwnerRegisterWizard::class)->name('cadastro-lojista');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
@@ -20,6 +25,9 @@ Route::middleware(['auth'])->group(function () {
 
         return view('dashboard', compact('totalCategorias', 'totalProdutos'));
     })->name('dashboard');
+
+
+
 
     // Rotas do Estabelecimento
     Route::get('/estabelecimento', [EstabelecimentoController::class, 'edit'])->name('estabelecimento.edit');
@@ -46,4 +54,4 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

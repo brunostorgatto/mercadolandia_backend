@@ -89,22 +89,22 @@
 
             <!-- Submit Button -->
             <div class="pt-2">
-                <button type="submit" 
+                <x-primary-button type="submit" 
                         class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transform active:scale-[0.99] transition-all duration-200">
                     <span>Entrar na Conta</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                     </svg>
-                </button>
+                </x-primary-button>
             </div>
         </form>
 
         <!-- Divider -->
-        @if (Route::has('register'))
+        @if (Route::has('cadastro-lojista'))
             <div class="pt-4 border-t border-slate-100 text-center">
                 <p class="text-xs text-slate-500">
                     Ainda não tem uma conta? 
-                    <a href="{{ route('register') }}" class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors ms-1">
+                    <a href="{{ route('cadastro-lojista') }}" class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors ms-1">
                         Cadastre-se gratuitamente
                     </a>
                 </p>
