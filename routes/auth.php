@@ -9,13 +9,20 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Login; 
+use App\Livewire\OwnerRegisterWizard;
 
 Route::middleware('guest')->group(function () {
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
+    /*Route::get('login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');*/
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    //Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+
+    Route::get('/login', Login::class)->name('login');
+
+    Route::get('/cadastro-lojista', OwnerRegisterWizard::class)->name('cadastro-lojista');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');

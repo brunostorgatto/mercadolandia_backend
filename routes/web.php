@@ -6,14 +6,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProdutoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\OwnerRegisterWizard;
+
 
 Route::get('/', function () {
     return redirect('/dashboard');
 });
 
 
-Route::get('/cadastro-lojista', OwnerRegisterWizard::class)->name('cadastro-lojista');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {

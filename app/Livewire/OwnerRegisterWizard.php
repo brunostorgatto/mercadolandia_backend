@@ -5,14 +5,14 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Invitation;
 use App\Models\User;
-use App\Models\Estabelecimento; // O model do seu estabelecimento
+use App\Models\Estabelecimento;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 
 class OwnerRegisterWizard extends Component
 {
-    public $step = 1; // Começa na etapa 1 (Convite)
+    public $step = 1;
 
     // Campos do Formulário
     public $invitation_code = '';
@@ -31,24 +31,24 @@ class OwnerRegisterWizard extends Component
         $this->invitationError = '';
 
         if (empty($this->invitation_code)) {
-            $this->invitationError = 'Por favor, insira o código do convite.';
+            $this->invitationError = __('messages.invite.required');
             return;
         }
 
         $invitation = Invitation::where('code', $this->invitation_code)->first();
 
         if (!$invitation) {
-            $this->invitationError = 'Este código de convite não existe.';
+            $this->invitationError = __('messages.invite.not_found');
             return;
         }
 
         if ($invitation->used_at) {
-            $this->invitationError = 'Este convite já foi utilizado.';
+            $this->invitationError = __('messages.invite.used');
             return;
         }
 
         if ($invitation->expires_at && now()->greaterThan($invitation->expires_at)) {
-            $this->invitationError = 'Este convite já expirou.';
+            $this->invitationError = __('messages.invite.expired');
             return;
         }
 
@@ -57,7 +57,7 @@ class OwnerRegisterWizard extends Component
             $this->email = $invitation->email;
         }
 
-        $this->step = 2; // Passou! Vai para a tela de Nome e Email
+        $this->step = 2;
     }
 
     // ==========================================
@@ -66,15 +66,17 @@ class OwnerRegisterWizard extends Component
     public function proceedToPassword()
     {
         $this->validate([
-            'name' => 'required|min:3',
+            'name'  => 'required|min:3',
             'email' => 'required|email|unique:users,email',
         ], [
-            'name.required' => 'O nome é obrigatório.',
-            'email.required' => 'O e-mail é obrigatório.',
-            'email.unique' => 'Este e-mail já está em uso.',
+            'name.required'  => __('messages.user.name_required'),
+            'name.min'       => __('messages.user.name_min'),
+            'email.required' => __('messages.user.email_required'),
+            'email.email'    => __('messages.user.email_invalid'),
+            'email.unique'   => __('messages.user.email_unique'),
         ]);
 
-        $this->step = 3; // Passou! Vai para a tela de Senha
+        $this->step = 3;
     }
 
     // ==========================================
@@ -85,24 +87,23 @@ class OwnerRegisterWizard extends Component
         $this->validate([
             'password' => 'required|min:8|confirmed',
         ], [
-            'password.required' => 'A senha é obrigatória.',
-            'password.min' => 'A senha deve ter no mínimo 8 caracteres.',
-            'password.confirmed' => 'As senhas não conferem.',
+            'password.required'  => __('messages.password.required'),
+            'password.min'       => __('messages.password.min'),
+            'password.confirmed' => __('messages.password.confirmed'),
         ]);
 
-        // 1. Cria um estabelecimento inicial (o dono vai editar isso no painel depois)
+        // 1. Cria um estabelecimento inicial
         $estabelecimento = Estabelecimento::create([
-            'nome' => 'Meu Mercado', // Nome padrão provisório
-            // Outros campos obrigatórios da sua tabela de estabelecimentos podem ir aqui com valores em branco
+            'nome' => 'Meu Mercado',
         ]);
 
         // 2. Cria o Usuário vinculando ao Estabelecimento
         $user = User::create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => Hash::make($this->password),
-            'estabelecimento_id' => $estabelecimento->id, // Vincula o ID conforme você explicou
-            'nivel_acesso' => 'admin', // Substitua 'nivel_acesso' pelo nome exato da sua coluna
+            'name'               => $this->name,
+            'email'              => $this->email,
+            'password'           => Hash::make($this->password),
+            'estabelecimento_id' => $estabelecimento->id,
+            'nivel_acesso'       => 'admin',
         ]);
 
         // 3. Queima o convite para não ser usado novamente
@@ -112,7 +113,7 @@ class OwnerRegisterWizard extends Component
         Auth::login($user);
 
         // 5. Redireciona para o painel
-        return redirect()->to('/dashboard'); // Mude para a rota do seu painel
+        return redirect()->to('/dashboard');
     }
 
     // ==========================================
@@ -124,7 +125,6 @@ class OwnerRegisterWizard extends Component
             $this->step--;
         }
     }
-
 
     #[Layout('layouts.guest')]
     public function render()
