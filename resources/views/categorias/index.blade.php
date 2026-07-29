@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-2xl font-extrabold text-slate-900 leading-tight">🗂️ Categorias do Cardápio</h1>
+                <h1 class="text-2xl font-extrabold text-slate-900 leading-tight">🗂️ Categorias e produtos</h1>
                 <p class="text-sm text-slate-500 mt-0.5">Arraste para reordenar. Clique em uma categoria para gerenciar os produtos.</p>
             </div>
         </div>
@@ -36,7 +36,7 @@
 
             {{-- Card de criação --}}
             <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5">
-                <form method="POST" action="{{ route('categorias.store') }}" class="flex items-center gap-3">
+                <form method="POST" action="{{ route('categorias.store') }}" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                     @csrf
                     <div class="flex-1 relative">
                         <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
@@ -54,7 +54,7 @@
                         />
                     </div>
                     <button type="submit"
-                            class="inline-flex items-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md shadow-emerald-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-95 whitespace-nowrap">
+                            class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md shadow-emerald-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-95 whitespace-nowrap">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
                         </svg>
@@ -79,41 +79,44 @@
                     <div class="categoria-item group bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200 cursor-grab active:cursor-grabbing"
                          data-id="{{ $cat->id }}">
 
-                        <div class="flex items-center gap-4 p-4">
-                            {{-- Handle de arraste --}}
-                            <div class="drag-handle p-1.5 -m-1.5 text-slate-400 hover:text-emerald-600 transition shrink-0 select-none cursor-grab active:cursor-grabbing rounded-lg hover:bg-slate-100" title="Clique e arraste para reordenar">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/>
-                                    <circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>
-                                    <circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/>
-                                </svg>
-                            </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4">
+                            {{-- Top block (Handle, Badge, Name & Count) --}}
+                            <div class="flex items-center gap-3 flex-1 min-w-0">
+                                {{-- Handle de arraste --}}
+                                <div class="drag-handle p-1.5 -m-1.5 text-slate-400 hover:text-emerald-600 transition shrink-0 select-none cursor-grab active:cursor-grabbing rounded-lg hover:bg-slate-100" style="touch-action: none;" title="Clique e arraste para reordenar">
+                                    <svg class="w-6 h-6 pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
+                                        <circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/>
+                                        <circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>
+                                        <circle cx="9" cy="19" r="1.5"/><circle cx="15" cy="19" r="1.5"/>
+                                    </svg>
+                                </div>
 
-                            {{-- Badge de ordem --}}
-                            <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center text-xs font-extrabold shrink-0 ordem-badge">
-                                {{ $loop->iteration }}
-                            </div>
+                                {{-- Badge de ordem --}}
+                                <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center text-xs font-extrabold shrink-0 ordem-badge">
+                                    {{ $loop->iteration }}
+                                </div>
 
-                            {{-- Nome (editável inline) --}}
-                            <div class="flex-1 min-w-0">
-                                <span class="nome-display text-sm font-bold text-slate-800 cursor-text" title="Clique para editar">
-                                    {{ $cat->nome }}
-                                </span>
-                                <form class="nome-form hidden" method="POST" action="{{ route('categorias.update', $cat) }}">
-                                    @csrf @method('PUT')
-                                    <input type="text"
-                                           name="nome"
-                                           value="{{ $cat->nome }}"
-                                           class="text-sm font-bold text-slate-800 bg-transparent border-b-2 border-emerald-400 outline-none w-full"
-                                           required />
-                                </form>
-                                <p class="text-xs text-slate-400 mt-0.5">
-                                    {{ $cat->produtos_count }} {{ $cat->produtos_count === 1 ? 'produto' : 'produtos' }}
-                                </p>
+                                {{-- Nome (editável inline) --}}
+                                <div class="flex-1 min-w-0">
+                                    <span class="nome-display text-sm font-bold text-slate-800 cursor-text truncate block" title="Clique para editar">
+                                        {{ $cat->nome }}
+                                    </span>
+                                    <form class="nome-form hidden" method="POST" action="{{ route('categorias.update', $cat) }}">
+                                        @csrf @method('PUT')
+                                        <input type="text"
+                                               name="nome"
+                                               value="{{ $cat->nome }}"
+                                               class="text-sm font-bold text-slate-800 bg-transparent border-b-2 border-emerald-400 outline-none w-full"
+                                               required />
+                                    </form>
+                                    <p class="text-xs text-slate-400 mt-0.5">
+                                        {{ $cat->produtos_count }} {{ $cat->produtos_count === 1 ? 'produto' : 'produtos' }}
+                                    </p>
+                                </div>
                             </div>
 
                             {{-- Ações --}}
-                            <div class="flex items-center gap-2 shrink-0">
+                            <div class="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 justify-end shrink-0">
                                 <a href="{{ route('categorias.produtos', $cat) }}"
                                    class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl hover:bg-emerald-100 transition">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,19 +190,28 @@
     </div>
 
     {{-- SortableJS --}}
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.3/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.3/Sortable.min.js" onload="iniciarSortable()"></script>
 
     <script>
         // =============================================
-        // DRAG & DROP
+        // DRAG & DROP (SORTABLEJS)
         // =============================================
-        const listaCategorias = document.getElementById('lista-categorias');
-        if (listaCategorias) {
-            Sortable.create(listaCategorias, {
+        function iniciarSortable() {
+            const listaCategorias = document.getElementById('lista-categorias');
+            if (!listaCategorias || typeof Sortable === 'undefined') return;
+            if (listaCategorias.dataset.sortableInitialized) return;
+            listaCategorias.dataset.sortableInitialized = 'true';
+
+            new Sortable(listaCategorias, {
                 handle: '.drag-handle',
+                draggable: '.categoria-item',
                 animation: 180,
-                ghostClass: 'opacity-40',
-                chosenClass: 'ring-2 ring-emerald-400 ring-offset-2 scale-[1.01] shadow-lg',
+                forceFallback: true,
+                fallbackOnBody: true,
+                fallbackTolerance: 3,
+                ghostClass: 'opacity-30',
+                chosenClass: 'scale-[1.01]',
+                dragClass: 'shadow-2xl',
                 onEnd: function () {
                     const ids = [...listaCategorias.querySelectorAll('.categoria-item')].map(function (el) {
                         return parseInt(el.dataset.id, 10);
@@ -233,6 +245,12 @@
                     });
                 }
             });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', iniciarSortable);
+        } else {
+            iniciarSortable();
         }
 
         function mostrarToastReordem(mensagem, isError = false) {
