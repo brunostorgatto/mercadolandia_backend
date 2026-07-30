@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Categoria extends Model
 {
-    protected $fillable = ['user_id', 'nome', 'ordem'];
+    protected $fillable = ['estabelecimento_id', 'nome', 'ordem'];
 
-    public function user()
+    public function estabelecimento()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Estabelecimento::class);
     }
 
     public function produtos()

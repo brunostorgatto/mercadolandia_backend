@@ -14,7 +14,8 @@ class ProdutoController extends Controller
     /** Exibe os produtos de uma categoria */
     public function index(Categoria $categoria)
     {
-        abort_if($categoria->user_id !== Auth::id(), 403);
+        // VERIFICA SE A CATEGORIA PERTENCE AO ESTABELECIMENTO DO USUÁRIO LOGADO
+        abort_if($categoria->estabelecimento_id !== Auth::user()->estabelecimento_id, 403);
 
         $produtos = $categoria->produtos()->orderBy('nome')->get();
 
@@ -24,14 +25,14 @@ class ProdutoController extends Controller
     /** Cria novo produto (recebe imagem como base64 do cropper) */
     public function store(Request $request, Categoria $categoria)
     {
-        abort_if($categoria->user_id !== Auth::id(), 403);
+        abort_if($categoria->estabelecimento_id !== Auth::user()->estabelecimento_id, 403);
 
         $request->validate([
-            'nome'          => 'required|string|max:150',
-            'preco'         => 'required|numeric|min:0',
-            'unidade_medida'=> 'required|in:un,kg,g,l',
-            'incremento'    => 'required|numeric|min:0.001',
-            'imagem_base64' => 'nullable|string',
+            'nome'           => 'required|string|max:150',
+            'preco'          => 'required|numeric|min:0',
+            'unidade_medida' => 'required|in:un,kg,g,l',
+            'incremento'     => 'required|numeric|min:0.001',
+            'imagem_base64'  => 'nullable|string',
         ]);
 
         $imagemPath = null;
@@ -57,7 +58,7 @@ class ProdutoController extends Controller
     public function edit(Produto $produto)
     {
         $categoria = $produto->categoria;
-        abort_if($categoria->user_id !== Auth::id(), 403);
+        abort_if($categoria->estabelecimento_id !== Auth::user()->estabelecimento_id, 403);
 
         return view('categorias.produto-form', compact('produto', 'categoria'));
     }
@@ -66,14 +67,15 @@ class ProdutoController extends Controller
     public function update(Request $request, Produto $produto)
     {
         $categoria = $produto->categoria;
-        abort_if($categoria->user_id !== Auth::id(), 403);
+        abort_if($categoria->estabelecimento_id !== Auth::user()->estabelecimento_id, 403);
 
         $request->validate([
-            'nome'          => 'required|string|max:150',
-            'preco'         => 'required|numeric|min:0',
-            'unidade_medida'=> 'required|in:un,kg,g,l',
-            'incremento'    => 'required|numeric|min:0.001',
-            'imagem_base64' => 'nullable|string',
+            'nome'           => 'required|string|max:150',
+            'preco'          => 'required|numeric|min:0',
+            'unidade_medida' => 'required|in:un,kg,g,l',
+            'incremento'     => 'required|numeric|min:0.001',
+            'imagem_base64'  => 'nullable|string',
+            'remover_imagem' => 'nullable|boolean',
         ]);
 
         $dados = [
@@ -83,8 +85,15 @@ class ProdutoController extends Controller
             'incremento'     => $request->incremento,
         ];
 
-        if ($request->filled('imagem_base64')) {
-            // Remove imagem antiga
+        // 1. Se o usuário clicou para remover a foto no modal
+        if ($request->boolean('remover_imagem')) {
+            if ($produto->imagem) {
+                Storage::disk('public')->delete($produto->imagem);
+            }
+            $dados['imagem'] = null;
+        }
+        // 2. Se o usuário cortou/enviou uma nova foto
+        elseif ($request->filled('imagem_base64')) {
             if ($produto->imagem) {
                 Storage::disk('public')->delete($produto->imagem);
             }
@@ -97,12 +106,13 @@ class ProdutoController extends Controller
             ->with('success', 'Produto atualizado!');
     }
 
-    /** Remove produto e sua imagem */
+    /** Remove produto e sua imagem física do disco */
     public function destroy(Produto $produto)
     {
         $categoria = $produto->categoria;
-        abort_if($categoria->user_id !== Auth::id(), 403);
+        abort_if($categoria->estabelecimento_id !== Auth::user()->estabelecimento_id, 403);
 
+        // Apaga o arquivo do armazenamento público antes de apagar a linha do banco
         if ($produto->imagem) {
             Storage::disk('public')->delete($produto->imagem);
         }

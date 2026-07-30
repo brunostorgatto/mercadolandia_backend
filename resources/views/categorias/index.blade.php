@@ -10,7 +10,7 @@
 
     {{-- Notificações --}}
     @if (session('success'))
-        <div id="toast-success"exit
+        <div id="toast-success"
              class="fixed top-20 right-5 z-50 flex items-center gap-3 bg-white border border-emerald-200 text-emerald-800 text-sm font-semibold px-5 py-3.5 rounded-2xl shadow-xl shadow-emerald-600/10 transition-all duration-500">
             <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>

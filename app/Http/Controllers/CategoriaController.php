@@ -8,10 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoriaController extends Controller
 {
-    /** Lista todas as categorias do usuário logado */
+    /** Lista todas as categorias do estabelecimento do usuário logado */
     public function index()
     {
-        $categorias = Categoria::where('user_id', Auth::id())
+        $estabelecimentoId = Auth::user()->estabelecimento_id;
+
+        $categorias = Categoria::where('estabelecimento_id', $estabelecimentoId)
             ->withCount('produtos')
             ->orderBy('ordem')
             ->orderBy('created_at')
@@ -20,19 +22,21 @@ class CategoriaController extends Controller
         return view('categorias.index', compact('categorias'));
     }
 
-    /** Cria nova categoria */
+    /** Cria nova categoria para o estabelecimento */
     public function store(Request $request)
     {
         $request->validate([
             'nome' => 'required|string|max:100',
         ]);
 
-        $maxOrdem = Categoria::where('user_id', Auth::id())->max('ordem') ?? 0;
+        $estabelecimentoId = Auth::user()->estabelecimento_id;
+
+        $maxOrdem = Categoria::where('estabelecimento_id', $estabelecimentoId)->max('ordem') ?? 0;
 
         Categoria::create([
-            'user_id' => Auth::id(),
-            'nome'    => $request->nome,
-            'ordem'   => $maxOrdem + 1,
+            'estabelecimento_id' => $estabelecimentoId,
+            'nome'               => $request->nome,
+            'ordem'              => $maxOrdem + 1,
         ]);
 
         return redirect()->route('categorias.index')
@@ -93,9 +97,11 @@ class CategoriaController extends Controller
             return response()->json(['error' => 'IDs de categorias não fornecidos.'], 422);
         }
 
+        $estabelecimentoId = Auth::user()->estabelecimento_id;
+
         foreach ($ids as $ordem => $id) {
             Categoria::where('id', (int) $id)
-                ->where('user_id', Auth::id())
+                ->where('estabelecimento_id', $estabelecimentoId)
                 ->update(['ordem' => $ordem + 1]);
         }
 
@@ -104,6 +110,6 @@ class CategoriaController extends Controller
 
     private function authorizeCategoria(Categoria $categoria): void
     {
-        abort_if($categoria->user_id !== Auth::id(), 403);
+        abort_if($categoria->estabelecimento_id !== Auth::user()->estabelecimento_id, 403);
     }
 }
