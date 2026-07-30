@@ -18,9 +18,9 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         $user = Auth::user();
-        $totalCategorias = \App\Models\Categoria::where('user_id', $user->id)->count();
+        $totalCategorias = \App\Models\Categoria::where('estabelecimento_id', $user->estabelecimento_id)->count();
         $totalProdutos = \App\Models\Produto::whereHas('categoria', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
+            $query->where('estabelecimento_id', $user->estabelecimento_id);
         })->count();
 
         return view('dashboard', compact('totalCategorias', 'totalProdutos'));
