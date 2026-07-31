@@ -1,10 +1,11 @@
-@props(['message' => null])
+@props(['messages'])
 
-<!-- A classe min-h-[24px] garante que o espaço vertical sempre exista -->
-<div class="min-h-[24px] pt-1.5">
-    @if ($message)
-        <p {{ $attributes->merge(['class' => 'text-xs text-rose-500 font-medium']) }}>
-            {{ $message }}
-        </p>
-    @endif
-</div>
+@if ($messages)
+    <div {{ $attributes->merge(['class' => 'mt-1.5 text-xs text-rose-600 font-semibold']) }}>
+        @foreach ((array) $messages as $message)
+            <p class="flex items-center gap-1">
+                <span>⚠️</span> {{ $message }}
+            </p>
+        @endforeach
+    </div>
+@endif

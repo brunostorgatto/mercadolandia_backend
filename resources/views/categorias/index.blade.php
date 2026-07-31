@@ -8,28 +8,7 @@
         </div>
     </x-slot>
 
-    {{-- Notificações --}}
-    @if (session('success'))
-        <div id="toast-success"
-             class="fixed top-20 right-5 z-50 flex items-center gap-3 bg-white border border-emerald-200 text-emerald-800 text-sm font-semibold px-5 py-3.5 rounded-2xl shadow-xl shadow-emerald-600/10 transition-all duration-500">
-            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            {{ session('success') }}
-        </div>
-        <script>setTimeout(() => { const t = document.getElementById('toast-success'); if(t) t.style.opacity = '0'; }, 3500);</script>
-    @endif
-
-    @if (session('error'))
-        <div id="toast-error"
-             class="fixed top-20 right-5 z-50 flex items-center gap-3 bg-white border border-rose-200 text-rose-800 text-sm font-semibold px-5 py-3.5 rounded-2xl shadow-xl shadow-rose-600/10 transition-all duration-500">
-            <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-            {{ session('error') }}
-        </div>
-        <script>setTimeout(() => { const t = document.getElementById('toast-error'); if(t) t.style.opacity = '0'; }, 4000);</script>
-    @endif
+    {{-- ℹ️ Bloco de Notificações removido daqui pois o <x-toast-overlay /> já cuida disso globalmente no Layout --}}
 
     <div class="py-8">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -50,11 +29,11 @@
                                placeholder="Nome da nova categoria (ex: Bebidas, Lanches...)"
                                required
                                autocomplete="off"
-                               class="block w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition"
+                               class="block w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition"
                         />
                     </div>
                     <button type="submit"
-                            class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md shadow-emerald-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-95 whitespace-nowrap">
+                            class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl shadow-md shadow-brand-600/25 transition-all duration-200 hover:scale-[1.02] active:scale-95 whitespace-nowrap">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
                         </svg>
@@ -83,7 +62,7 @@
                             {{-- Top block (Handle, Badge, Name & Count) --}}
                             <div class="flex items-center gap-3 flex-1 min-w-0">
                                 {{-- Handle de arraste --}}
-                                <div class="drag-handle p-1.5 -m-1.5 text-slate-400 hover:text-emerald-600 transition shrink-0 select-none cursor-grab active:cursor-grabbing rounded-lg hover:bg-slate-100" style="touch-action: none;" title="Clique e arraste para reordenar">
+                                <div class="drag-handle p-1.5 -m-1.5 text-slate-400 hover:text-brand-600 transition shrink-0 select-none cursor-grab active:cursor-grabbing rounded-lg hover:bg-slate-100" style="touch-action: none;" title="Clique e arraste para reordenar">
                                     <svg class="w-6 h-6 pointer-events-none" fill="currentColor" viewBox="0 0 24 24">
                                         <circle cx="9" cy="5" r="1.5"/><circle cx="15" cy="5" r="1.5"/>
                                         <circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>
@@ -92,7 +71,7 @@
                                 </div>
 
                                 {{-- Badge de ordem --}}
-                                <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center text-xs font-extrabold shrink-0 ordem-badge">
+                                <div class="w-8 h-8 rounded-xl bg-brand-50 border border-brand-200 text-brand-700 flex items-center justify-center text-xs font-extrabold shrink-0 ordem-badge">
                                     {{ $loop->iteration }}
                                 </div>
 
@@ -106,7 +85,7 @@
                                         <input type="text"
                                                name="nome"
                                                value="{{ $cat->nome }}"
-                                               class="text-sm font-bold text-slate-800 bg-transparent border-b-2 border-emerald-400 outline-none w-full"
+                                               class="text-sm font-bold text-slate-800 bg-transparent border-b-2 border-brand-400 outline-none w-full"
                                                required />
                                     </form>
                                     <p class="text-xs text-slate-400 mt-0.5">
@@ -118,7 +97,7 @@
                             {{-- Ações --}}
                             <div class="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 justify-end shrink-0">
                                 <a href="{{ route('categorias.produtos', $cat) }}"
-                                   class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl hover:bg-emerald-100 transition">
+                                   class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-brand-700 bg-brand-50 border border-brand-200 rounded-xl hover:bg-brand-100 transition">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
                                     </svg>
@@ -193,9 +172,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.3/Sortable.min.js" onload="iniciarSortable()"></script>
 
     <script>
-        // =============================================
-        // DRAG & DROP (SORTABLEJS)
-        // =============================================
         function iniciarSortable() {
             const listaCategorias = document.getElementById('lista-categorias');
             if (!listaCategorias || typeof Sortable === 'undefined') return;
@@ -217,12 +193,10 @@
                         return parseInt(el.dataset.id, 10);
                     });
 
-                    // Atualiza badges de ordem visualmente
                     listaCategorias.querySelectorAll('.ordem-badge').forEach(function (badge, i) {
                         badge.textContent = i + 1;
                     });
 
-                    // Salva no servidor
                     fetch('{{ route("categorias.reorder") }}', {
                         method: 'POST',
                         headers: {
@@ -264,7 +238,7 @@
 
             toast.innerHTML = isError 
                 ? `<span class="text-rose-400 font-extrabold">⚠️</span> <span>${mensagem}</span>` 
-                : `<span class="text-emerald-400 font-extrabold">✓</span> <span>${mensagem}</span>`;
+                : `<span class="text-brand-400 font-extrabold">✓</span> <span>${mensagem}</span>`;
 
             toast.classList.remove('opacity-0', 'translate-y-2');
 
@@ -273,9 +247,7 @@
             }, 2500);
         }
 
-        // =============================================
         // EDITAR NOME INLINE
-        // =============================================
         document.querySelectorAll('.btn-editar-nome').forEach(btn => {
             btn.addEventListener('click', function () {
                 const card = this.closest('.categoria-item');
@@ -288,7 +260,6 @@
                 input.focus();
                 input.select();
 
-                // Salvar ao pressionar Enter ou perder o foco
                 const salvar = () => form.submit();
                 input.addEventListener('keydown', e => { if (e.key === 'Enter') salvar(); });
                 input.addEventListener('blur', () => {
@@ -298,9 +269,7 @@
             });
         });
 
-        // =============================================
         // DELETAR COM MODAL
-        // =============================================
         const modalDeletar = document.getElementById('modal-deletar');
         const formDeletar = document.getElementById('form-deletar');
         const msgDeletar = document.getElementById('modal-deletar-msg');
@@ -334,7 +303,6 @@
             modalDeletar.classList.remove('flex');
         });
 
-        // Fechar ao clicar fora
         modalDeletar.addEventListener('click', function (e) {
             if (e.target === this) {
                 this.classList.add('hidden');

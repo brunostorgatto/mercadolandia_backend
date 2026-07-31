@@ -2,7 +2,7 @@
     <!-- Título & Subtítulo (Muda dinamicamente conforme a etapa) -->
     <div class="text-center relative">
         @if ($step > 1)
-        <button wire:click="goBack" type="button" class="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+        <button wire:click="goBack" type="button" class="absolute left-0 top-1/2 -translate-y-1/2 text-slate-400 hover:text-brand-600 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -40,19 +40,21 @@
                     type="text"
                     wire:model="invitation_code"
                     placeholder="Ex: ABC-123-XYZ"
-                    class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
+                    class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:bg-white transition-all duration-200" />
             </div>
-            <x-error-message :message="$invitationError" />
+            
+            {{-- Componente de erro padrão centralizado --}}
+            <x-input-error :messages="$errors->get('invitation_code')" />
+            {{-- Mantendo sua variável customizada de erro do convite, caso exista no Livewire --}}
+            <x-input-error :messages="$invitationError" />
         </div>
 
         <div class="pt-2">
-            <x-primary-button
-                wire:click="validateInvitation"
-                wire:loading.attr="disabled"
-                class="w-full">
+            {{-- Botão limpo chamando o componente central --}}
+            <x-primary-button wire:click="validateInvitation" wire:loading.attr="disabled" class="w-full">
                 <span wire:loading.remove wire:target="validateInvitation">Validar Convite</span>
                 <span wire:loading wire:target="validateInvitation">Verificando...</span>
-                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg wire:loading.remove wire:target="validateInvitation" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
             </x-primary-button>
@@ -77,10 +79,10 @@
                     type="text"
                     wire:model="name"
                     placeholder="Ex: João da Silva"
-                    class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
+                    class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:bg-white transition-all duration-200" />
             </div>
             
-            <x-error-message :message="$errors->first('name')" />
+            <x-input-error :messages="$errors->get('name')" />
         </div>
 
         <div>
@@ -97,20 +99,17 @@
                     type="email"
                     wire:model="email"
                     placeholder="seu@email.com"
-                    class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
+                    class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:bg-white transition-all duration-200" />
             </div>
             
-            <x-error-message :message="$errors->first('email')" />
+            <x-input-error :messages="$errors->get('email')" />
         </div>
 
         <div class="pt-2">
-            <x-primary-button
-                wire:click="proceedToPassword"
-                wire:loading.attr="disabled"
-                class="w-full">
+            <x-primary-button wire:click="proceedToPassword" wire:loading.attr="disabled" class="w-full">
                 <span wire:loading.remove wire:target="proceedToPassword">Continuar para Senha</span>
                 <span wire:loading wire:target="proceedToPassword">Processando...</span>
-                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg wire:loading.remove wire:target="proceedToPassword" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
             </x-primary-button>
@@ -121,7 +120,7 @@
     <!-- ================= ETAPA 3: SENHA ================= -->
     @if ($step === 3)
     <div class="space-y-5">
-        <div>
+        <div x-data="{ showPassword: false }">
             <label for="password" class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
                 Sua Senha
             </label>
@@ -132,13 +131,24 @@
                     </svg>
                 </div>
                 <input id="password"
-                    type="password"
+                    :type="showPassword ? 'text' : 'password'"
                     wire:model="password"
                     placeholder="••••••••"
-                    class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
+                    class="block w-full pl-11 pr-11 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:bg-white transition-all duration-200" />
+                
+                <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-brand-600 focus:outline-none">
+                    <svg x-show="!showPassword" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                    <svg x-show="showPassword" x-cloak class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.025 10.025 0 0111.13 1.937M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"></path>
+                    </svg>
+                </button>
             </div>
             
-            <x-error-message :message="$errors->first('password')" />
+            <x-input-error :messages="$errors->get('password')" />
         </div>
 
         <div>
@@ -155,20 +165,17 @@
                     type="password"
                     wire:model="password_confirmation"
                     placeholder="••••••••"
-                    class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
+                    class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 focus:bg-white transition-all duration-200" />
             </div>
 
-            <x-error-message :message="$errors->first('password_confirmation')" />
+            <x-input-error :messages="$errors->get('password_confirmation')" />
         </div>
 
         <div class="pt-2">
-            <x-primary-button
-                wire:click="register"
-                wire:loading.attr="disabled"
-                class="w-full">
+            <x-primary-button wire:click="register" wire:loading.attr="disabled" class="w-full">
                 <span wire:loading.remove wire:target="register">Finalizar Cadastro</span>
                 <span wire:loading wire:target="register">Criando Conta...</span>
-                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg wire:loading.remove wire:target="register" class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                 </svg>
             </x-primary-button>
@@ -180,7 +187,7 @@
     <div class="pt-4 border-t border-slate-100 text-center">
         <p class="text-xs text-slate-500">
             Já possui uma conta registrada?
-            <a href="{{ route('login') }}" class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors ms-1">
+            <a href="{{ route('login') }}" class="font-bold text-brand-600 hover:text-brand-700 hover:underline transition-colors ms-1">
                 Fazer Login
             </a>
         </p>

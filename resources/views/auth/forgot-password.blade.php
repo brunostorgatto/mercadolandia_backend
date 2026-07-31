@@ -27,34 +27,32 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
                         </svg>
                     </div>
-                    <input id="email" 
-                           type="email" 
-                           name="email" 
-                           value="{{ old('email') }}" 
-                           required 
-                           autofocus 
-                           placeholder="seu@email.com"
-                           class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
+                    <input id="email"
+                        type="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        required
+                        autofocus
+                        placeholder="seu@email.com"
+                        class="block w-full pl-11 pr-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm placeholder-slate-400 text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition-all duration-200" />
                 </div>
                 <x-input-error :messages="$errors->get('email')" class="mt-1 text-xs text-rose-500" />
             </div>
 
             <!-- Submit Button -->
             <div class="pt-2">
-                <button type="submit" 
-                        class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transform active:scale-[0.99] transition-all duration-200">
-                    <span>Enviar Link de Redefinição</span>
+                <x-primary-button class="w-full"> <span>Enviar Link de Redefinição</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                     </svg>
-                </button>
+                </x-primary-button>
             </div>
         </form>
 
         <!-- Footer Link -->
         <div class="pt-4 border-t border-slate-100 text-center">
             <p class="text-xs text-slate-500">
-                Lembrou da senha? 
+                Lembrou da senha?
                 <a href="{{ route('login') }}" class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors ms-1">
                     Voltar para o Login
                 </a>
@@ -62,4 +60,3 @@
         </div>
     </div>
 </x-guest-layout>
-

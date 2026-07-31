@@ -14,6 +14,17 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                // ✅ COR DA MARCA CENTRALIZADA (Verde Emerald do seu layout)
+                brand: {
+                    50:  '#ecfdf5',
+                    100: '#d1fae5',
+                    500: '#10b981',
+                    600: '#059669', // Verde principal dos botões e do logo
+                    700: '#047857',
+                    900: '#064e3b',
+                }
+            }
         },
     },
 

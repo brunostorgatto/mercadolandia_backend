@@ -15,7 +15,7 @@
             </div>
             <button type="button"
                 id="btn-abrir-modal-novo"
-                class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow-md shadow-emerald-600/25 transition-all hover:scale-[1.02] active:scale-95">
+                class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl shadow-md shadow-brand-600/25 transition-all hover:scale-[1.02] active:scale-95">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
                 </svg>
@@ -24,21 +24,7 @@
         </div>
     </x-slot>
 
-    {{-- Toasts --}}
-    @if (session('success'))
-    <div id="toast-ok" class="fixed top-20 right-5 z-50 flex items-center gap-3 bg-white border border-emerald-200 text-emerald-800 text-sm font-semibold px-5 py-3.5 rounded-2xl shadow-xl transition-all">
-        <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-        </svg>
-        {{ session('success') }}
-    </div>
-    <script>
-        setTimeout(() => {
-            const t = document.getElementById('toast-ok');
-            if (t) t.style.opacity = '0';
-        }, 3500);
-    </script>
-    @endif
+    {{-- ℹ️ Bloco de Toasts removido daqui pois o <x-toast-overlay /> cuida disso de forma global no Layout --}}
 
     <div class="py-8">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,7 +59,7 @@
                         {{-- Overlay de ações --}}
                         <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2">
                             <button type="button"
-                                class="btn-editar-produto w-9 h-9 rounded-xl bg-white text-slate-700 hover:bg-emerald-500 hover:text-white flex items-center justify-center transition shadow-md"
+                                class="btn-editar-produto w-9 h-9 rounded-xl bg-white text-slate-700 hover:bg-brand-500 hover:text-white flex items-center justify-center transition shadow-md"
                                 data-produto='{{ json_encode(["id" => $produto->id, "nome" => $produto->nome, "preco" => $produto->preco, "unidade_medida" => $produto->unidade_medida, "incremento" => $produto->incremento, "foto_url" => $produto->foto_url]) }}'
                                 title="Editar produto">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,7 +82,7 @@
                     <div class="p-3 flex flex-col gap-1 flex-1">
                         <p class="text-xs font-bold text-slate-800 leading-snug line-clamp-2">{{ $produto->nome }}</p>
                         <div class="flex items-center justify-between mt-auto pt-1">
-                            <span class="text-sm font-extrabold text-emerald-700">
+                            <span class="text-sm font-extrabold text-brand-700">
                                 R$ {{ number_format($produto->preco, 2, ',', '.') }}
                             </span>
                             <span class="text-[10px] font-bold uppercase text-slate-500 bg-slate-100 rounded-lg px-2 py-0.5">
@@ -145,7 +131,7 @@
 
                     {{-- Área de upload / preview 1:1 --}}
                     <div id="zona-upload"
-                        class="relative w-full max-w-[200px] aspect-square mx-auto border-2 border-dashed border-slate-300 hover:border-emerald-400 rounded-2xl transition-colors cursor-pointer overflow-hidden flex items-center justify-center bg-slate-50">
+                        class="relative w-full max-w-[200px] aspect-square mx-auto border-2 border-dashed border-slate-300 hover:border-brand-400 rounded-2xl transition-colors cursor-pointer overflow-hidden flex items-center justify-center bg-slate-50">
 
                         {{-- Estado vazio --}}
                         <div id="upload-placeholder" class="flex flex-col items-center justify-center gap-1.5 p-4 text-center text-slate-400">
@@ -164,7 +150,7 @@
 
                     {{-- Botões de Ação da Foto --}}
                     <div class="flex items-center justify-between max-w-[200px] mx-auto mt-2">
-                        <button type="button" id="btn-trocar-foto" class="hidden text-xs font-semibold text-emerald-600 hover:underline">
+                        <button type="button" id="btn-trocar-foto" class="hidden text-xs font-semibold text-brand-600 hover:underline">
                             🔄 Trocar
                         </button>
                         <button type="button" id="btn-remover-foto" class="hidden text-xs font-semibold text-rose-600 hover:underline">
@@ -187,7 +173,7 @@
                         name="nome"
                         placeholder="Ex: Coca-Cola 2L, Pão Francês, Banana..."
                         required
-                        class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition" />
+                        class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition" />
                 </div>
 
                 {{-- Preço + Unidade --}}
@@ -204,7 +190,7 @@
                                 placeholder="0,00"
                                 required
                                 autocomplete="off"
-                                class="block w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition" />
+                                class="block w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition" />
                         </div>
                         <input type="hidden" id="produto-preco" name="preco" />
                     </div>
@@ -215,7 +201,7 @@
                         <select id="produto-unidade"
                             name="unidade_medida"
                             required
-                            class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition">
+                            class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
                             <option value="un">un — Unidade</option>
                             <option value="kg">kg — Quilograma</option>
                             <option value="g">g — Grama</option>
@@ -237,7 +223,7 @@
                         step="0.001"
                         value="1"
                         required
-                        class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition" />
+                        class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition" />
                     <p class="text-[11px] text-slate-400 mt-1">
                         Ex: <strong>1</strong> para unidades, <strong>0.5</strong> para meio-quilo, <strong>0.1</strong> para 100g.
                     </p>
@@ -250,7 +236,7 @@
                         Cancelar
                     </button>
                     <button type="submit" id="btn-salvar-produto"
-                        class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md shadow-emerald-600/25 transition-all hover:scale-[1.02] active:scale-95">
+                        class="flex-1 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md shadow-brand-600/25 transition-all hover:scale-[1.02] active:scale-95">
                         Salvar Produto
                     </button>
                 </div>
@@ -278,7 +264,7 @@
                     Cancelar
                 </button>
                 <button type="button" id="btn-confirmar-crop"
-                    class="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md shadow-emerald-600/25 transition">
+                    class="flex-1 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md shadow-brand-600/25 transition">
                     ✅ Confirmar Recorte
                 </button>
             </div>
@@ -313,7 +299,7 @@
         </div>
     </div>
 
-    {{-- MODAL DE CONFIRMAÇÃO DE REMOÇÃO DE FOTO (COM Z-INDEX 80 FORA DO MODAL PRINCIPAL) --}}
+    {{-- MODAL DE CONFIRMAÇÃO DE REMOÇÃO DE FOTO --}}
     <div id="modal-confirmar-remover-foto" class="fixed inset-0 z-[80] hidden items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-100 space-y-5 relative z-[81]">
             <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
@@ -343,9 +329,7 @@
     <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
 
     <script>
-        // =============================================
         // MÁSCARA DE MOEDA
-        // =============================================
         function aplicarMascaraMoeda(input) {
             input.addEventListener('input', function() {
                 let digits = this.value.replace(/\D/g, '');
@@ -363,9 +347,7 @@
             });
         }
 
-        // =============================================
         // MODAL PRODUTO: Abrir / Fechar
-        // =============================================
         const modalProduto = document.getElementById('modal-produto');
         const formProduto = document.getElementById('form-produto');
         const modalTitulo = document.getElementById('modal-titulo');
@@ -452,7 +434,6 @@
             });
         });
 
-        // Clique no botão "Remover Foto" no formulário
         btnRemoverFoto.addEventListener('click', () => {
             if (produtoAtualEdicao && produtoAtualEdicao.foto_url && inputImagemBase64.value === '') {
                 modalConfirmarRemoverFoto.classList.remove('hidden');
@@ -462,7 +443,6 @@
             }
         });
 
-        // Fechar confirmação de remoção de foto
         document.getElementById('btn-cancelar-remover-foto').addEventListener('click', () => {
             modalConfirmarRemoverFoto.classList.add('hidden');
             modalConfirmarRemoverFoto.classList.remove('flex');
@@ -475,7 +455,6 @@
             }
         });
 
-        // Confirmar remoção e submeter sinalização para o backend
         document.getElementById('btn-confirmar-remover-foto').addEventListener('click', () => {
             inputRemoverImagem.value = '1';
             modalConfirmarRemoverFoto.classList.add('hidden');
@@ -484,9 +463,7 @@
             formProduto.submit();
         });
 
-        // =============================================
         // CROPPER.JS
-        // =============================================
         const modalCropper = document.getElementById('modal-cropper');
         const imgParaCrop = document.getElementById('imagem-para-crop');
         const inputFoto = document.getElementById('input-foto');
@@ -563,9 +540,7 @@
             inputFoto.click();
         });
 
-        // =============================================
         // DELETAR PRODUTO
-        // =============================================
         const modalDeletarProduto = document.getElementById('modal-deletar-produto');
 
         document.querySelectorAll('.btn-deletar-produto').forEach(btn => {
